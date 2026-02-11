@@ -2,16 +2,27 @@
 let
   pkgs = import (fetchTarball("channel:nixpkgs-unstable")) {};
 
+  sourceCodeRevision = "ef77b28";
+  sourceCodeHash256 = "sha256-cm7FvrJIDj6BxgNvYF8i2U0vbIZ/E/O7D1VJifdxVPo=";
+  freenetCargoHash = "sha256-WJfLOwzEVjYUwJcGlOBwK9xIyN3aYI4qqF45bEtvyHo=";
+
   freenetSrc = pkgs.stdenv.mkDerivation rec {
     pname = "freenet-core-src";
     version = "git";
     src = pkgs.fetchFromGitHub {
       owner = "freenet";
       repo = "freenet-core";
-      rev = "ef77b28"; # pin this once it works
-      sha256 = "sha256-cm7FvrJIDj6BxgNvYF8i2U0vbIZ/E/O7D1VJifdxVPo=";
+      rev = sourceCodeRevision;
+      sha256 = sourceCodeHash256;
       fetchSubmodules = true;
     };
+
+    buildPhase = ''
+      # disable auto-update.
+      substituteInPlace crates/core/src/bin/commands/auto_update.rs \
+        --replace "UpdateCheckResult::UpdateAvailable(latest)" "UpdateCheckResult::Skipped"
+    '';
+
     installPhase = ''
       cp -r . $out
     '';
@@ -36,7 +47,7 @@ let
 
     doCheck = false;
 
-    cargoHash = "sha256-WJfLOwzEVjYUwJcGlOBwK9xIyN3aYI4qqF45bEtvyHo=";
+    cargoHash = freenetCargoHash;
 
     installPhase = ''
       runHook preInstall
@@ -74,7 +85,7 @@ let
 
     doCheck = false;
 
-    cargoHash = "sha256-WJfLOwzEVjYUwJcGlOBwK9xIyN3aYI4qqF45bEtvyHo=";
+    cargoHash = freenetCargoHash;
 
     installPhase = ''
       runHook preInstall
