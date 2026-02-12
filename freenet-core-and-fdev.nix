@@ -1,10 +1,13 @@
-{ }:
-let
-  pkgs = import (fetchTarball("channel:nixpkgs-unstable")) {};
+{
+  pkgs ? import (fetchTarball("channel:nixpkgs-unstable")) {},
 
-  sourceCodeRevision = "ef77b28";
-  sourceCodeHash256 = "sha256-cm7FvrJIDj6BxgNvYF8i2U0vbIZ/E/O7D1VJifdxVPo=";
-  freenetCargoHash = "sha256-WJfLOwzEVjYUwJcGlOBwK9xIyN3aYI4qqF45bEtvyHo=";
+
+}:
+let
+  sourceCodeRevision = "HEAD";
+  sourceCodeHash256 = "sha256-MX98tWWK34S2AiFSL45ds2en0v/cPsPnHUKuzQZr+sY=";
+  freenetCargoHash = "sha256-50gbfDUVx4FRkOwnuOngd3tpKvBJgx+3AMjHBccu4xk=";
+  derivationVersion = "0.2";
 
   freenetSrc = pkgs.stdenv.mkDerivation rec {
     pname = "freenet-core-src";
@@ -108,7 +111,7 @@ in
 
 pkgs.symlinkJoin rec {
   pname = "freenet-core-and-fdev";
-  version = "0.0.1";
+  version = derivationVersion;
 
   paths = [ freenetCore fdev ];
 }

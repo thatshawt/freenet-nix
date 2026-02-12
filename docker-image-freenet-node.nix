@@ -38,7 +38,7 @@ pkgs.dockerTools.buildImage {
 
     Env = [
       "RUST_BACKTRACE=1"
-      "RUST_LOG=\"info,freenet=debug,freenet-stdlib=debug,fdev=debug\""
+      "RUST_LOG=\"freenet=debug,freenet-stdlib=debug,fdev=debug\""
     ];
 
     ExposedPorts = {
