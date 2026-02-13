@@ -1,13 +1,11 @@
 {
   pkgs ? import (fetchTarball("channel:nixpkgs-unstable")) {},
-
-
 }:
 let
   sourceCodeRevision = "HEAD";
-  sourceCodeHash256 = "sha256-MX98tWWK34S2AiFSL45ds2en0v/cPsPnHUKuzQZr+sY=";
-  freenetCargoHash = "sha256-50gbfDUVx4FRkOwnuOngd3tpKvBJgx+3AMjHBccu4xk=";
-  derivationVersion = "0.2";
+  sourceCodeHash256 = "sha256-4NlYUcjQ9mc1ukMJ6cJ3k2BlGG1iARZWybY7THgTPeY=";
+  freenetCargoHash = "sha256-xOMZRXB5pKWm4HuZSw79JIZx9jwW7t8F5lDgApqZxM8=";
+  derivationVersion = "3";
 
   freenetSrc = pkgs.stdenv.mkDerivation rec {
     pname = "freenet-core-src";
