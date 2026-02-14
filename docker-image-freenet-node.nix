@@ -1,11 +1,13 @@
-# {
-#   lib
-# }:
+{
+  # here i put <nixpkgs> instead of doing "channel:nixpkgs-unstable" is because it didnt work that way :P
+  pkgs ? import (<nixpkgs>) {},
+}:
 
 let
-  # pkgs = import (fetchTarball("channel:nixpkgs-unstable")) {};
-  pkgs = import (<nixpkgs>) {};
-  freenetCoreAndFdev = pkgs.callPackage ./freenet-core-and-fdev.nix {};
+  latestPkgs = import (fetchTarball("channel:nixpkgs-unstable")) {};
+  freenetCoreAndFdev = pkgs.callPackage ./freenet-core-and-fdev.nix {
+    pkgs = latestPkgs;
+  };
 
   BASE_DIR="/root/.cache/freenet";
   NODE_DIR="${BASE_DIR}/node";
@@ -21,13 +23,7 @@ pkgs.dockerTools.buildImage {
     mkdir -p ${NODE_DIR}
   '';
 
-  # copyToRoot = pkgs.buildEnv {
-  #   name = "image-root";
-  #   paths = [ freenetCoreAndFdev ];
-  #   pathsToLink = [ "/bin" ];
-  # };
-  # copyToRoot = [ freenetCoreAndFdev ];
-
+  # got this information from the freenet-core repository in the docker folder
   config = {
     Cmd = [
       "${freenetCoreAndFdev}/bin/freenet" "network"
