@@ -2,10 +2,10 @@
   pkgs ? import (fetchTarball("channel:nixpkgs-unstable")) {},
 }:
 let
-  sourceCodeRevision = "1e2a37e5047c079e44d3246db1176dacce273ba5";
-  sourceCodeHash256 = "sha256-iVVkp3FZSbeejcRVXLctCdiAX6y8bmaPnsw8Xw5FLP4=";
-  freenetCargoHash = "sha256-Gv3+fVvdVYJ+emP7c/MZvenra9ZPDM20QtcDm8v6lm8=";
-  derivationVersion = "5";
+  sourceCodeRevision = "ed1f298f4c6a84ad65b5bcbcadfee40095d0a334";
+  sourceCodeHash256 = "sha256-/xU6i25GKD8JM/Q4GCasSd5Pa2BUOcrE+EqScKfdBqQ=";
+  freenetCargoHash = "sha256-UwZiZZ5spfa+Ev2Q5qzdfzQUOS163Q49yMMYX+Eojdg=";
+  derivationVersion = "6";
 
   freenetSrc = pkgs.stdenv.mkDerivation rec {
     pname = "freenet-core-src";
@@ -22,6 +22,10 @@ let
       # disable auto-update.
       substituteInPlace crates/core/src/bin/commands/auto_update.rs \
         --replace "UpdateCheckResult::UpdateAvailable(latest)" "UpdateCheckResult::Skipped"
+
+      # disable update.
+      substituteInPlace crates/core/src/bin/commands/update.rs \
+        --replace "self.download_and_install(&latest).await" "return Ok(());"
     '';
 
     installPhase = ''

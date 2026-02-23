@@ -1,5 +1,4 @@
 {
-  # here i put <nixpkgs> instead of doing "channel:nixpkgs-unstable" is because it didnt work that way :P
   pkgs ? import (<nixpkgs>) {},
 }:
 
@@ -12,6 +11,8 @@ let
   BASE_DIR="/root/.cache/freenet";
   NODE_DIR="${BASE_DIR}/node";
   WS_API_PORT="7509";
+  GATEWAY_EXTRA_UDP_PORT="31337";
+  PUBLIC_UDP_PORT="52701";
 in
 
 pkgs.dockerTools.buildImage {
@@ -30,6 +31,7 @@ pkgs.dockerTools.buildImage {
       "--config-dir" "${BASE_DIR}"
       "--data-dir" "${NODE_DIR}"
       "--ws-api-port" "${WS_API_PORT}"
+      "--network-port" "${PUBLIC_UDP_PORT}"
     ];
 
     Env = [
@@ -39,6 +41,8 @@ pkgs.dockerTools.buildImage {
 
     ExposedPorts = {
       "${WS_API_PORT}" = {};
+      "${GATEWAY_EXTRA_UDP_PORT}" = {};
+      "${PUBLIC_UDP_PORT}" = {};
     };
 
     # do we need this?
